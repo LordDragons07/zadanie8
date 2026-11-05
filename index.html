@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Обратная связь</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="feedback.js" defer></script>
+</head>
+<body>
+
+    <main id="content">
+        <h1>Обратная связь</h1>
+        <p>Есть вопрос или предложение? Напишите нам — мы ответим как можно скорее.</p>
+        <button type="button" id="open-button" class="button">Написать нам</button>
+    </main>
+
+    <div id="popup" class="popup" hidden>
+        <div class="popup-window" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+
+            <button type="button" id="close-button" class="popup-close" aria-label="Закрыть форму">&times;</button>
+            <h2 id="popup-title">Форма обратной связи</h2>
+
+            <form id="feedback-form" action="https://formcarry.com/s/YOUR_FORM_ID" method="post">
+
+                <label for="fio">ФИО</label>
+                <input type="text" id="fio" name="fio" autocomplete="name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+
+                <label for="phone">Телефон</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel"
+                       pattern="[0-9+\-\s()]{6,20}" title="Только цифры, пробелы и символы + - ( )" required>
+
+                <label for="organization">Организация</label>
+                <input type="text" id="organization" name="organization" autocomplete="organization">
+
+                <label for="message">Сообщение</label>
+                <textarea id="message" name="message" rows="3" required></textarea>
+
+                <label class="agree">
+                    <input type="checkbox" id="agree" name="agree" required>
+                    Согласен с политикой обработки персональных данных
+                </label>
+
+                <button type="submit" id="submit-button" class="button">Отправить</button>
+
+                <p id="status" class="status" role="status"></p>
+
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>
