@@ -24,35 +24,22 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function saveData() {
         var data = {};
-
         fields.forEach(function (field) {
             data[field.name] = field.type === "checkbox" ? field.checked : field.value;
         });
-
         try {
             localStorage.setItem(storageKey, JSON.stringify(data));
-        } catch (ignore) {
-            return;
-        }
+        } catch (ignore) {}
     }
 
     function restoreData() {
         var data = null;
-
         try {
             data = JSON.parse(localStorage.getItem(storageKey));
-        } catch (ignore) {
-            data = null;
-        }
-
-        if (!data) {
-            return;
-        }
-
+        } catch (ignore) { data = null; }
+        if (!data) return;
         fields.forEach(function (field) {
-            if (data[field.name] === undefined) {
-                return;
-            }
+            if (data[field.name] === undefined) return;
             if (field.type === "checkbox") {
                 field.checked = data[field.name] === true;
             } else {
@@ -62,11 +49,7 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     function clearData() {
-        try {
-            localStorage.removeItem(storageKey);
-        } catch (ignore) {
-            return;
-        }
+        try { localStorage.removeItem(storageKey); } catch (ignore) {}
     }
 
     function showPopup() {
@@ -83,10 +66,12 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     function openForm() {
-        if (!popup.hidden) {
-            return;
+        if (!popup.hidden) return;
+        try {
+            history.pushState({ feedback: true }, "", popupHash);
+        } catch (ignore) {
+            /* file:// или среда без History API — открываем без смены URL */
         }
-        history.pushState({feedback: true}, "", popupHash);
         showPopup();
     }
 
@@ -100,19 +85,17 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function sendForm(event) {
         event.preventDefault();
-
-        if (!form.reportValidity()) {
-            return;
-        }
+        if (!form.reportValidity()) return;
 
         clearStatus();
         submitButton.disabled = true;
 
         fetch(form.action, {
             method: "POST",
-            headers: {"Accept": "application/json"},
+            headers: { "Accept": "application/json" },
             body: new FormData(form)
         }).then(function (response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
             return response.json();
         }).then(function (data) {
             if (data.code === 200) {
@@ -141,15 +124,11 @@ window.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", sendForm);
 
     popup.addEventListener("click", function (event) {
-        if (event.target === popup) {
-            closeForm();
-        }
+        if (event.target === popup) closeForm();
     });
 
     document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && !popup.hidden) {
-            closeForm();
-        }
+        if (event.key === "Escape" && !popup.hidden) closeForm();
     });
 
     window.addEventListener("popstate", function (event) {
@@ -161,7 +140,9 @@ window.addEventListener("DOMContentLoaded", function () {
     });
 
     if (window.location.hash === popupHash) {
-        history.replaceState(null, "", window.location.pathname + window.location.search);
+        try {
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+        } catch (ignore) {}
         openForm();
     }
 
