@@ -77,7 +77,7 @@ fioInput.addEventListener("input", function () {
         try {
             history.pushState({ feedback: true }, "", popupHash);
         } catch (ignore) {
-            /* file:// или среда без History API — открываем без смены URL */
+            
         }
         showPopup();
     }
