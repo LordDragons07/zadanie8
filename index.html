@@ -24,8 +24,9 @@
             <form id="feedback-form" action="https://formcarry.com/s/YOUR_FORM_ID" method="post">
 
                 <label for="fio">ФИО</label>
-                <input type="text" id="fio" name="fio" autocomplete="name" required>
-
+            <input type="text" id="fio" name="fio" autocomplete="name" required
+           pattern="[А-Яа-яЁёA-Za-z\s]{2,60}"
+           title="Только буквы, пробелы">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" autocomplete="email" required>
 
