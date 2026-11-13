@@ -11,7 +11,14 @@ window.addEventListener("DOMContentLoaded", function () {
     var submitButton = document.getElementById("submit-button");
     var statusMessage = document.getElementById("status");
     var fields = form.querySelectorAll("input, textarea");
+    var fioInput = document.getElementById("fio");
 
+fioInput.addEventListener("input", function () {
+    var cleaned = this.value.replace(/[^А-Яа-яЁёA-Za-z\s]/g, "");
+    if (cleaned !== this.value) {
+        this.value = cleaned;
+    }
+});
     function showStatus(text, isError) {
         statusMessage.textContent = text;
         statusMessage.className = isError ? "status status-error" : "status status-success";
